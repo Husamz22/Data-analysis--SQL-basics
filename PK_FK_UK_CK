@@ -1,5 +1,3 @@
---//PK
-
 create table student(
 id serial primary key not null,
 first_name varchar(20) not null,
@@ -9,7 +7,7 @@ course_enrolled varchar(20) not null,
 course_fee float not null
 )
 
---// another way to set the primary key
+-- another way to set the primary key
 
 -- create table student(
 ---- id serial not null,
@@ -28,8 +26,6 @@ values('mike', 'tyson', 38,'boxing analytics',297.99)
 select * from student
 
 
-
-
 --// composite PK. unique combination of fname and lname
 
 create table sales_rep(
@@ -44,11 +40,7 @@ values('klara', 'nova', 25000)
 
 select * from sales_rep
 
-
-
-
-
---// unique key.
+--// unique key. can be multible VS can only be one PK
 
 create table email_registartion(
 fname varchar(20) not null,
@@ -71,3 +63,42 @@ values('c', 'tyson')
 
 select * from email_registartion
 
+--// Foreign key
+
+create table employee(
+id serial primary key,
+fname varchar(20) not null,
+lname varchar(20) not null,
+age int not null,
+location varchar(20) not null default 'prague',
+dept varchar(20) not null
+)
+
+insert into employee(fname, lname, age, location, dept)
+values('sam', 'tyson', 27, 'prague', 'IT'),
+('mike', 'sing', 25, 'prague', 'HR'),
+('noah', 'jack', 37, 'prague', 'OPS')
+
+select * from employee
+
+-- an fk can reference a pk not a non pk
+
+create table department(
+dept_name varchar(20) primary key,
+dept_head varchar(20) not null
+)
+
+insert into department(dept_name, dept_head)
+values('IT', 'jakey'),
+('HR', 'jane'),
+('OPS', 'dominik')
+
+
+alter table employee
+add foreign key(dept)
+references department(dept_name)
+
+insert into employee(fname, lname, age, location, dept)
+values('newguy', 'oldguy', 88, 'prague', 'healthcare')
+-- doesnt add because healthcare isnt in the dept_name which is the primary key that is referenced by the foreign key dept
+select * from department
