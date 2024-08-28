@@ -1,0 +1,65 @@
+create table student(
+id serial primary key not null,
+first_name varchar(20) not null,
+last_name varchar(20) not null, 
+age int not null,
+course_enrolled varchar(20) not null,
+course_fee float not null
+)
+
+-- another way to set the primary key
+
+-- create table student(
+---- id serial not null,
+-- first_name varchar(20) not null,
+-- last_name varchar(20) not null, 
+-- age int not null,
+-- course_enrolled varchar(20) not null,
+-- course_fee float not null
+---- primary key(id)
+-- )
+
+
+insert into student(first_name, last_name, age, course_enrolled, course_fee)
+values('mike', 'tyson', 38,'boxing analytics',297.99)
+
+select * from student
+
+
+--// composite PK. unique combination of fname and lname
+
+create table sales_rep(
+rep_fname varchar(20) not null,
+rep_lname varchar(20) not null,
+salary float not null,
+primary key (rep_fname, rep_lname)
+)
+
+insert into sales_rep(rep_fname, rep_lname, salary)
+values('klara', 'nova', 25000)
+
+select * from sales_rep
+
+--// unique key.
+
+create table email_registartion(
+fname varchar(20) not null,
+lname varchar(20) not null,
+email varchar(40) unique not null,
+primary key(fname, lname)
+)
+
+insert into email_registartion
+values('sam', 'mike', 'sam_mike.com')
+
+insert into email_registartion
+values('c', 'tyson', 'sam_mike.com')
+-- Error due to dublicate values not being allowed with a unique key constraint
+
+insert into email_registartion
+values('c', 'tyson')
+-- error because of not null constraint
+
+
+select * from email_registartion
+
