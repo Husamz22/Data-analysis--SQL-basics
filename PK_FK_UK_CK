@@ -1,3 +1,5 @@
+--//PK
+
 create table student(
 id serial primary key not null,
 first_name varchar(20) not null,
@@ -7,7 +9,7 @@ course_enrolled varchar(20) not null,
 course_fee float not null
 )
 
--- another way to set the primary key
+--// another way to set the primary key
 
 -- create table student(
 ---- id serial not null,
@@ -26,6 +28,8 @@ values('mike', 'tyson', 38,'boxing analytics',297.99)
 select * from student
 
 
+
+
 --// composite PK. unique combination of fname and lname
 
 create table sales_rep(
@@ -39,6 +43,10 @@ insert into sales_rep(rep_fname, rep_lname, salary)
 values('klara', 'nova', 25000)
 
 select * from sales_rep
+
+
+
+
 
 --// unique key.
 
