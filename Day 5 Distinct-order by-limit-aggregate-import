@@ -1,1 +1,91 @@
+create table employee(
+id serial primary key,
+f_name varchar(20) not null,
+l_name varchar(20) not null,
+age int not null,
+location varchar(20) not null,
+dept varchar(30) not null
+);
 
+
+insert into employee(f_name, l_name,age, location, dept) values('jane', 'doe', 28, 'prague', 'IT')
+
+alter table employee
+add salary int,
+add check(salary>0);
+
+update employee
+set salary = 23000 where f_name='jane'and l_name='doe'and id=1;
+
+alter table employee
+alter column salary set not null;
+
+insert into employee(f_name, l_name,age, location, dept) values('jane', 'doe', 28, 'prague', 'IT');
+--error cause not null constarint, THIS ERROR CAUSES THE ID[PK] TO SKIP A COUNT!!
+
+
+insert into employee(f_name, l_name,age, location, dept, salary)
+values('jane', 'doe', 28, 'prague', 'IT', 24000),
+	('Emily', 'Smith', 34, 'Berlin', 'Marketing', 32000),
+	('Michael', 'Johnson', 42, 'Toronto', 'Finance', 55000),
+	('Sofia', 'Martinez', 29, 'Madrid', 'Design', 27000),
+	('Liam', 'Brown', 31, 'Sydney', 'Engineering', 45000),
+	('Ava', 'Wilson', 25, 'New York', 'Healthcare', 28000);
+
+select * from employee;
+
+select location, f_name from employee;
+select distinct location, avg(salary) as avg_salary from employee group by location;
+select count(distinct dept) from employee;
+
+select distinct location,
+avg(salary) as avg_salary from employee
+group by location
+order by avg_salary;
+
+select distinct location,
+avg(salary) as avg_salary from employee
+group by location
+order by avg_salary, location desc;
+
+select * from employee limit 3;
+
+alter table employee
+add column id serial primary key
+-- attempt to fix the id(pk) after it skipped a number
+
+
+select * from employee limit 3 offset 0;
+
+
+
+
+
+
+
+--// Importing data from CSV
+
+
+create table salary(
+id serial primary key,
+f_name varchar(20),
+l_name varchar(20),
+sex varchar,
+doj date,
+current date,
+designate varchar(30),
+age int,
+salary int,
+unit varchar(20),
+Leaves_used int,
+Leaves_remain int,
+rating int,
+past_exp int
+);
+
+drop table salary;
+
+select * from salary; 
+
+-- i had to remove the not null constraint because alot of the data has null values and it wont import like that
+-- the data needs to be cleaned before its imported.
