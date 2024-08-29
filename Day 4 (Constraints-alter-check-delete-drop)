@@ -1,0 +1,59 @@
+create table employee(
+id serial primary key,
+fname varchar(20) not null,
+lname varchar(20) not null,
+age int not null,
+location varchar(20) not null default 'prague',
+dept varchar(20) not null
+)
+
+insert into employee(fname, lname, age, location, dept)
+values('sam', 'tyson', 22, 'prague', 'IT'),
+('mike', 'sing', 27, 'prague', 'HR'),
+('noah', 'jack', 30, 'prague', 'OPS')
+
+select * from employee
+
+alter table employee
+add foreign key(dept)
+references department(dept_name)
+-- error because healthcare isn't in the dept_name which is the primary key that is referenced by the foreign key dept
+
+
+
+
+--// check constartint
+
+alter table employee
+add check (age<=35)
+--can be used in e.g. check (product_price>0)
+
+insert into employee(fname, lname, age, location, dept)
+values('newestguy', 'oldestguy', 40, 'prague', 'healthcare')
+-- error due to check constraint
+
+
+
+
+
+--// Changing details 
+
+select * from employee
+
+delete from employee where lname = 'sing'
+
+alter table employee
+alter column hobby type varchar(30)
+
+alter table employee
+alter column hobby drop default
+
+insert into employee(fname, lname, age, location, dept)
+values('newestguy', 'oldestguy', 37, 'prague', 'Health')
+-- error due to not null hobby field constraint.
+-- error due to age check 
+-- error due to FK dept not being able to reference health from the dpt PK
+
+fix>>
+insert into employee(fname, lname, age, location, dept, hobby)
+values('newestguy', 'oldestguy', 35, 'prague', 'IT', 'football')
