@@ -1,0 +1,48 @@
+--// CRUD create-retrieve/select-update-delete
+
+--DDL create, alter, drop, truncate
+--DDL insert, update, delete
+--DQL select
+
+create table employee(
+id serial primary key,
+name varchar(20) not null,
+dept varchar(30) not null,
+date_of_joining date  not null default current_date,
+salary real not null,
+check(salary>0),
+last_updated timestamp default now()
+);
+
+-- now() and current_timestamp are the same
+
+insert into employee(name, dept, salary)
+VALUES('John Doe', 'Engineering', 75000),
+('Jane Smith', 'Marketing', 68000),
+('Alice Johnson', 'Human Resources', 62000),
+('Bob Williams', 'Finance', 82000),
+('Emily Davis', 'Engineering', 72000);
+
+
+select * from employee;
+
+
+
+--// aggregations SUM, AVG, MIN, MAX, COUNT
+
+select count(*) as count_employee from employee; --count how many records
+select count(distinct dept) as dept_count from employee;
+
+select count(name) from employee where dept='Engineering';
+select name from employee where dept='Engineering';
+
+select dept, count(name) as employee_count from employee group by dept;
+select dept, salary from employee where salary between 60000 and 70000;
+
+select dept, sum(salary) as salary_sum from employee group by dept;
+select dept, max(salary) as salary_max from employee group by dept;
+select dept, min(salary) as salary_min from employee group by dept;
+select dept, avg(salary) as salary_avg from employee group by dept;
+select dept, salary, count(name) as employee_count from employee group by dept, salary having salary>70000;
+
+delete from employee where name='Jane Smith';
