@@ -1,0 +1,148 @@
+--// JOINS combining columns from various tables on a common field
+
+--(inner) matching data from both tables based on the join clause
+-- when the value isnt present in both tables it will not participate in the join.
+
+--(left join) all the data from the left side table and matches from the right table will appear in the output
+-- for the no matches a null value will be given
+
+--(right join) the same as the (left join) but it starts with the left table and matches with the right table
+
+--(full join) all records will be added and if there is a record that doesnt have a match a null value will be added 
+
+--(left only( left outer)) A-B, data that exists only in the left side table
+--(right only( right outer)) B-A, data that exists only in the right side table
+--(not inner( full outer)) the not common data from both tables, the values that dont have a match on the other side
+
+create table courses(
+name varchar(20),
+course varchar(20)
+);
+
+insert into courses 
+values ('Alice Smith', 'Mathematics'),
+		('Bob Johnson', 'Physics'),
+		('Charlie Brown', 'Computer Science'),
+		('Diana Evans', 'Chemistry');
+
+select * from courses;
+
+
+
+
+
+create table students(
+name varchar(20),
+age int
+)
+
+insert into students
+values ('Alice Smith', 22),
+('Bob Johnson', 24),
+('Charlie Brown', 21),
+('Easter doe', 23);
+
+select * from students
+
+
+
+
+
+--//inner join -- matches from both sides
+select students.name, age, courses.name, course
+from students inner join courses on students.name = courses.name;
+
+--// left join -- students is the focus and matches are brought from the right side 
+select students.name, age, courses.name, course
+from students left join courses on students.name = courses.name;
+
+--//right join -- all the data from the right side table with matches from the left side, any mismatch will be null
+select students.name, age, courses.name, course
+from students right join courses on students.name = courses.name;
+
+--//full join -- all records from both sides will be added and if there is a record that doesnt have a match a null value will be added
+select students.name, age, courses.name, course
+from students full join courses on students.name = courses.name;
+
+--(left only( left outer))- like a left join without nulls 
+select students.name, age, courses.name, course
+from students left outer join courses on students.name = courses.name
+where courses.name IS NULL;
+
+--(righth only( right outer))
+select students.name, age, courses.name, course
+from students right outer join courses on students.name = courses.name
+where students.name IS NULL;
+
+--(not inner( full outer)) the not common data from both tables, the values that dont have a match on the other side
+select students.name, age, courses.name, course from students full outer join courses
+on students.name = courses.name
+where students.name is null or courses.name is null;
+
+
+
+--// unions -- combining the rows -- appending the data
+
+create table may(
+day int,
+customer varchar,
+purchases int,
+type varchar);
+
+insert into may
+VALUES 
+(1, 'Alice Smith', 5, 'Electronics'),
+(2, 'Bob Johnson', 3, 'Groceries'),
+(5, 'Charlie Brown', 2, 'Clothing'),
+(10, 'Diana Evans', 8, 'Books'),
+(15, 'Eve Turner', 4, 'Electronics');
+
+
+create table june(
+day int,
+customer varchar,
+purchases int,
+type varchar);
+
+insert into june 
+values
+(3, 'Alice Smith', 6, 'Groceries'),
+(7, 'Bob Johnson', 2, 'Books'),
+(10, 'Charlie Brown', 4, 'Electronics'),
+(12, 'Diana Evans', 1, 'Clothing'),
+(20, 'Frank Moore', 5, 'Groceries');
+
+
+create table july(
+day int,
+customer varchar,
+purchases int,
+type varchar);
+
+insert into july
+values 
+(2, 'Alice Smith', 7, 'Clothing'),
+(4, 'Bob Johnson', 3, 'Electronics'),
+(8, 'Charlie Brown', 6, 'Books'),
+(14, 'Diana Evans', 2, 'Groceries'),
+(18, 'George White', 4, 'Electronics');
+
+
+create table union_output as --- one redundant way to export tables because it adds to storage
+select *, 'may' as month from may
+UNION select *, 'june' as month from june
+UNION select *, 'july' as month from july order by month;
+
+-- another way of writing the syntax
+SELECT day, customer, purchases, type, 'May' AS month FROM may
+UNION
+SELECT day, customer, purchases, type, 'June' AS month FROM june
+UNION
+SELECT day, customer, purchases, type, 'July' AS month FROM july;
+
+create view union_output as  --- creating a view instead of creating another table in the database
+select *, 'may' as month from may
+UNION select *, 'june' as month from june
+UNION select *, 'july' as month from july order by month;
+
+select * from union_output;
