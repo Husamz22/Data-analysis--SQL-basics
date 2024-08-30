@@ -1,0 +1,59 @@
+
+--// sub queries
+
+create table department_new(
+id serial primary key,
+name varchar(50)
+);
+
+insert into department_new(name)
+values ('IT'), ('HR'), ('PR');
+
+select * from department_new;
+
+
+create table employee2(
+id serial primary key,
+name varchar(50),
+salary real,
+departmentID int,
+foreign key(departmentID) references department_new(id)
+);
+
+insert into employee2(name, salary, departmentID)
+values ('John Doe', 55000.00, 1),
+('Jane Smith', 65000.00, 2),
+('Alice Johnson', 70000.00, 3),
+('Bob Brown', 50000.00, 1),
+('Eve Davis', 72000.00, 2);
+
+select * from employee2;
+
+-- find emplyees with salary less tan avg
+
+select name, salary from employee2 where salary <( select avg(salary) from employee2);
+
+
+
+create table marks(
+id serial primary key,
+student_name varchar(50),
+student_marks int
+);
+
+insert into marks (student_name, student_marks)
+values ('Alice', 85),
+('Bob', 78),
+('Charlie', 92),
+('Diana', 88),
+('Eve', 76),
+('Frank', 81),
+('Grace', 89);
+
+select * from department_new;
+select * from marks;
+
+select * from marks where student_marks<=35 or student_marks>=80;
+
+select * from marks where student_marks not in 
+(select student_marks from marks where student_marks <= 35 or student_marks >=80)
