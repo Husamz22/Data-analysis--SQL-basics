@@ -1,0 +1,112 @@
+--// sub queries
+
+create table department_new(
+id serial primary key,
+name varchar(50)
+);
+
+insert into department_new(name)
+values ('IT'), ('HR'), ('PR');
+
+select * from department_new;
+
+
+
+
+create table employee2(
+id serial primary key,
+name varchar(50),
+salary real,
+departmentID int,
+foreign key(departmentID) references department_new(id)
+);
+
+insert into employee2(name, salary, departmentID)
+values ('John Doe', 55000.00, 1),
+('Jane Smith', 65000.00, 2),
+('Alice Johnson', 70000.00, 3),
+('Bob Brown', 50000.00, 1),
+('Eve Davis', 72000.00, 2);
+
+select * from employee2;
+
+
+
+-- find emplyees with salary less tan avg
+
+select name, salary from employee2 where salary <( select avg(salary) from employee2);
+
+ 
+
+-- find max salary per department
+
+select department_new.name, max(salary), departmentid
+from employee2
+inner join department_new on department_new.id= employee2.departmentid
+group by department_new.name, departmentid;
+
+
+
+
+
+-- find max salary per department name and the employee name from that department
+
+
+select departmentid, salary as salary, department_new.name, employee2.name from employee2
+inner join department_new on department_new.id=employee2.departmentid
+where (departmentid, salary) in
+(select departmentid, max(salary) as salary from employee2 group by employee2.departmentid);
+
+
+
+-- find the second highest salary/ subquery example
+
+select max(salary) from employee2 where salary < (select max(salary) from employee2);
+
+
+
+
+
+
+--// Triggers
+
+create table sales_data(
+cust_name varchar(50) not null,
+product_name varchar(50) not null,
+amount real not null,
+quantity real not null,
+total_price real
+);
+
+insert into sales_data
+values('Jakey', 'laptop', 500, 2),('Huz', 'table', 150, 3);
+
+
+select * from sales_data
+
+
+--creating the trigger function
+
+create function calc_total_price()
+returns trigger 
+as $$
+declare total numeric;
+begin
+total = new.amount * new.quantity;
+		 new.total_price = total;
+		return new;
+end;
+$$ language plpgsql;
+
+-- create the trigger
+
+create trigger calc_total_insert
+before insert
+on sales_data
+for each row
+execute procedure calc_total_price()
+
+insert into sales_data
+values('james', 'tv', 500, 2),('kim', 'screen', 150, 3);
+
+select * from sales_data;
